@@ -219,8 +219,13 @@ function deleteCity(id: string) {
 
 function addForecastDay() {
   if (!selectedCity.value) return
+  const weekdays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  const existingCount = selectedCity.value.forecast.length
+  const date = new Date()
+  date.setDate(date.getDate() + existingCount + 1)
+  const label = existingCount === 0 ? '明天' : existingCount === 1 ? '后天' : weekdays[date.getDay()]
   selectedCity.value.forecast.push({
-    dayLabel: '新一天',
+    dayLabel: label,
     weatherType: 'sunny',
     high: 25,
     low: 15,
@@ -461,6 +466,10 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
 
 select.field-input {
   appearance: auto;
+}
+select.field-input option {
+  background: #1c1c2e;
+  color: #fff;
 }
 
 /* Forecast editor */
