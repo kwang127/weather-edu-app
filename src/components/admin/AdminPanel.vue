@@ -86,7 +86,7 @@
                 @click="selectedCity!.clothingIcon = icon.id"
                 :title="icon.label"
               >
-                <component :is="icon.component" :size="22" />
+                <img :src="icon.src" :alt="icon.label" width="28" height="28" />
                 <span class="icon-pick-label">{{ icon.label }}</span>
               </button>
             </div>
@@ -166,7 +166,7 @@
                 @click="newPreset.clothingIcon = icon.id"
                 :title="icon.label"
               >
-                <component :is="icon.component" :size="22" />
+                <img :src="icon.src" :alt="icon.label" width="28" height="28" />
                 <span class="icon-pick-label">{{ icon.label }}</span>
               </button>
             </div>
@@ -273,7 +273,7 @@ const newPreset = reactive({
   high: 30,
   low: 18,
   clothingTip: '',
-  clothingIcon: 'shirt' as ClothingIcon,
+  clothingIcon: 'tshirt' as ClothingIcon,
   forecast: [] as any[],
 })
 
@@ -291,7 +291,7 @@ function doCreatePreset() {
   newPreset.high = 30
   newPreset.low = 18
   newPreset.clothingTip = ''
-  newPreset.clothingIcon = 'shirt'
+  newPreset.clothingIcon = 'tshirt'
 }
 
 function doRemovePreset(id: string) {

@@ -1,36 +1,25 @@
-import {
-  Shirt,
-  Umbrella,
-  Glasses,
-  Snowflake,
-  Sun,
-  CloudRainWind,
-  Wind,
-  Thermometer,
-  Footprints,
-} from 'lucide-vue-next'
 import type { ClothingIcon } from '@/types/weather'
-import type { Component } from 'vue'
+
+import tshirtIcon from '@/assets/clothing-icons/tshirt.svg'
+import longsleeveIcon from '@/assets/clothing-icons/longsleeve.svg'
+import jacketIcon from '@/assets/clothing-icons/jacket.svg'
+import downCoatIcon from '@/assets/clothing-icons/down-coat.svg'
+import umbrellaIcon from '@/assets/clothing-icons/umbrella.svg'
 
 export interface ClothingIconOption {
   id: ClothingIcon
   label: string
-  component: Component
+  src: string
 }
 
 export const CLOTHING_ICONS: ClothingIconOption[] = [
-  { id: 'shirt', label: '短袖', component: Shirt },
-  { id: 'jacket', label: '外套', component: Shirt },
-  { id: 'umbrella', label: '雨伞', component: Umbrella },
-  { id: 'glasses', label: '太阳镜', component: Glasses },
-  { id: 'snowflake', label: '保暖', component: Snowflake },
-  { id: 'sun', label: '防晒', component: Sun },
-  { id: 'cloud-rain-wind', label: '风雨', component: CloudRainWind },
-  { id: 'wind', label: '防风', component: Wind },
-  { id: 'thermometer', label: '温度', component: Thermometer },
-  { id: 'footprints', label: '鞋靴', component: Footprints },
+  { id: 'tshirt', label: '短袖', src: tshirtIcon },
+  { id: 'longsleeve', label: '长袖', src: longsleeveIcon },
+  { id: 'jacket', label: '外套', src: jacketIcon },
+  { id: 'down-coat', label: '羽绒服', src: downCoatIcon },
+  { id: 'umbrella', label: '雨伞', src: umbrellaIcon },
 ]
 
-export const CLOTHING_ICON_MAP: Record<ClothingIcon, Component> = Object.fromEntries(
-  CLOTHING_ICONS.map((i) => [i.id, i.component])
-) as Record<ClothingIcon, Component>
+export const CLOTHING_ICON_MAP: Record<ClothingIcon, string> = Object.fromEntries(
+  CLOTHING_ICONS.map((i) => [i.id, i.src])
+) as Record<ClothingIcon, string>

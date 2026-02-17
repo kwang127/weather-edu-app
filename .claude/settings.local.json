@@ -18,7 +18,10 @@
       "Bash(wc:*)",
       "Bash(npx tsc:*)",
       "Bash(npm run build:*)",
-      "WebFetch(domain:lucide.dev)"
+      "WebFetch(domain:lucide.dev)",
+      "Bash(for f in \"C:/Users/kwang/Downloads/wear-icon/\"*.svg)",
+      "Bash(do cp \"$f\" \"e:/0CSTX/26 春季学期/0Code/weather-edu-app/src/assets/clothing-icons/\")",
+      "Bash(npm uninstall:*)"
     ]
   }
 }

@@ -18,16 +18,11 @@ export interface ForecastDay {
 }
 
 export type ClothingIcon =
-  | 'shirt'
-  | 'umbrella'
-  | 'glasses'
-  | 'snowflake'
-  | 'sun'
-  | 'cloud-rain-wind'
-  | 'wind'
-  | 'thermometer'
+  | 'tshirt'
+  | 'longsleeve'
   | 'jacket'
-  | 'footprints'
+  | 'down-coat'
+  | 'umbrella'
 
 export interface CityWeather {
   id: string

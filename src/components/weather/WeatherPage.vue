@@ -59,7 +59,7 @@
       <div v-if="displaySettings.showClothing && city.clothingTip" class="glass-card clothing-card">
         <div class="card-title">穿着建议</div>
         <div class="clothing-content">
-          <component :is="clothingIconComponent" :size="32" class="clothing-icon" />
+          <img :src="clothingIconSrc" alt="" width="32" height="32" class="clothing-icon" />
           <span>{{ city.clothingTip }}</span>
         </div>
       </div>
@@ -137,8 +137,8 @@ const formattedDate = computed(() => {
   return `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`
 })
 
-const clothingIconComponent = computed(() =>
-  CLOTHING_ICON_MAP[city.value.clothingIcon] || CLOTHING_ICON_MAP['shirt']
+const clothingIconSrc = computed(() =>
+  CLOTHING_ICON_MAP[city.value.clothingIcon] || CLOTHING_ICON_MAP['tshirt']
 )
 
 // Swipe handling
