@@ -61,12 +61,6 @@
               <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
             </select>
 
-            <label class="field-label">时段</label>
-            <select v-model="selectedCity.timeOfDay" class="field-input">
-              <option value="day">白天</option>
-              <option value="night">夜晚</option>
-            </select>
-
             <label class="field-label">当前温度</label>
             <input v-model.number="selectedCity.temperature" type="number" min="-50" max="50" class="field-input" @input="validateTemp('temperature')" />
             <div v-if="tempErrors.temperature" class="field-error">{{ tempErrors.temperature }}</div>
