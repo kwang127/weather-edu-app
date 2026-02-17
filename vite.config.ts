@@ -9,7 +9,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       manifest: {
-        name: '天气教学助手',
+        name: '天气',
         short_name: '天气',
         description: '天气教学辅助工具',
         theme_color: '#4A90D9',

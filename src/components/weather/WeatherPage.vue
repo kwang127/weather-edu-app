@@ -67,7 +67,7 @@
       </div>
 
       <!-- TTS button -->
-      <button class="tts-button glass-card" @click="speak" aria-label="语音播报天气">
+      <button v-if="displaySettings.showTTS" class="tts-button glass-card" @click="speak" aria-label="语音播报天气">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
           <path d="M11 5L6 9H2v6h4l5 4V5z" fill="rgba(255,255,255,0.9)"/>
           <path d="M15.54 8.46a5 5 0 010 7.07" stroke="rgba(255,255,255,0.9)" stroke-width="1.5" stroke-linecap="round"/>
@@ -191,12 +191,35 @@ function checkPassword() {
 
 // TTS
 function speak() {
+  const synth = window.speechSynthesis
+  synth.cancel()
+
   const text = `${city.value.name}，今天${weatherLabel.value}，当前温度${city.value.temperature}度，最高${city.value.high}度，最低${city.value.low}度。${city.value.clothingTip || ''}`
   const utterance = new SpeechSynthesisUtterance(text)
   utterance.lang = 'zh-CN'
   utterance.rate = 0.85
-  speechSynthesis.cancel()
-  speechSynthesis.speak(utterance)
+
+  // On Android WebView, voices may not be loaded yet
+  const voices = synth.getVoices()
+  const zhVoice = voices.find((v) => v.lang.startsWith('zh'))
+  if (zhVoice) {
+    utterance.voice = zhVoice
+  }
+
+  synth.speak(utterance)
+
+  // Android WebView workaround: if no voices loaded, retry after voiceschanged
+  if (voices.length === 0) {
+    const onVoicesReady = () => {
+      synth.cancel()
+      const retryVoices = synth.getVoices()
+      const zh = retryVoices.find((v) => v.lang.startsWith('zh'))
+      if (zh) utterance.voice = zh
+      synth.speak(utterance)
+      synth.removeEventListener('voiceschanged', onVoicesReady)
+    }
+    synth.addEventListener('voiceschanged', onVoicesReady)
+  }
 }
 </script>
 
@@ -356,7 +379,8 @@ function speak() {
 /* City dots */
 .city-dots {
   position: fixed;
-  bottom: 32px;
+  top: 16px;
+  top: calc(16px + env(safe-area-inset-top, 0));
   left: 50%;
   transform: translateX(-50%);
   display: flex;

@@ -107,6 +107,7 @@ function createDefaultState(): AppState {
       showTempRange: true,
       showForecast: true,
       showClothing: true,
+      showTTS: true,
     },
     presets: createBuiltInPresets(),
     password: '1234',
@@ -135,6 +136,10 @@ function loadState(): AppState {
           (p) => !existingBuiltInIds.includes(p.id)
         )
         parsed.presets = [...missingPresets, ...parsed.presets]
+        // Migrate: add showTTS if missing
+        if (parsed.displaySettings.showTTS === undefined) {
+          parsed.displaySettings.showTTS = true
+        }
         return parsed
       }
     }

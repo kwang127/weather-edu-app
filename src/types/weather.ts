@@ -43,6 +43,7 @@ export interface DisplaySettings {
   showTempRange: boolean
   showForecast: boolean
   showClothing: boolean
+  showTTS: boolean
 }
 
 export interface Preset {

@@ -360,6 +360,7 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   { key: 'showTempRange', label: '最高/最低温度' },
   { key: 'showForecast', label: '未来天气预报' },
   { key: 'showClothing', label: '穿着推荐' },
+  { key: 'showTTS', label: '语音播报按钮' },
 ]
 
 // Toast notification

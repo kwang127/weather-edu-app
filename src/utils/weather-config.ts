@@ -53,7 +53,7 @@ export const WEATHER_GRADIENTS: Record<WeatherType, GradientConfig> = {
     night: 'linear-gradient(180deg, #0D0D1A 0%, #1A1A2E 50%, #2D2B55 100%)',
   },
   snow: {
-    day: 'linear-gradient(180deg, #B0BEC5 0%, #CFD8DC 50%, #ECEFF1 100%)',
+    day: 'linear-gradient(180deg, #546E7A 0%, #607D8B 50%, #78909C 100%)',
     night: 'linear-gradient(180deg, #263238 0%, #37474F 50%, #455A64 100%)',
   },
   fog: {
