@@ -4,343 +4,343 @@
     "category": "functional",
     "description": "项目可通过 npm install && npm run dev 正常启动，浏览器访问无报错",
     "steps": ["运行 npm install", "运行 npm run dev", "浏览器打开页面无白屏无控制台报错"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 2,
     "category": "functional",
     "description": "localStorage 数据层：读写城市列表、天气数据、显示设置，刷新后数据保持",
     "steps": ["保存城市数据到 localStorage", "刷新页面", "验证数据仍然存在且正确"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 3,
     "category": "functional",
     "description": "默认数据初始化：首次打开时自动创建一个默认城市及天气数据",
     "steps": ["清除 localStorage", "打开应用", "验证存在默认城市（如北京）和默认天气数据"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 4,
     "category": "style",
     "description": "动态渐变背景：晴天显示蓝色渐变背景",
     "steps": ["设置天气为晴天", "查看背景为蓝色渐变", "渐变方向从上到下，颜色自然过渡"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 5,
     "category": "style",
     "description": "动态渐变背景：阴天显示灰蓝渐变、雨天深灰蓝、雪天浅灰白、雾天浅灰",
     "steps": ["分别切换到阴天/雨天/雪天/雾天", "验证每种天气对应不同的渐变背景色"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 6,
     "category": "style",
     "description": "动态渐变背景：夜晚模式显示深蓝紫渐变",
     "steps": ["在管理界面设置时段为夜晚", "验证背景切换为深蓝紫色渐变"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 7,
     "category": "functional",
     "description": "英雄区显示城市名称，字体清晰可读",
     "steps": ["打开学生界面", "验证顶部显示当前城市名称"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 8,
     "category": "style",
     "description": "当前温度使用超大超细字体显示（font-weight:200, ~96px）",
     "steps": ["查看温度数字", "验证字体极细、尺寸大、风格类似 Apple Weather"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 9,
     "category": "functional",
     "description": "天气图标：根据天气类型显示对应的 SVG 图标（晴/多云/阴/雨/雪/雾/雷雨）",
     "steps": ["切换不同天气类型", "验证每种天气显示不同的图标", "图标为简洁几何风格非卡通"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 10,
     "category": "functional",
     "description": "天气描述文字：图标下方显示天气状况中文文字（如"晴"、"小雨"）",
     "steps": ["查看英雄区", "验证天气图标附近有对应的中文天气描述"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 11,
     "category": "functional",
     "description": "日期星期显示：展示当前日期和星期几",
     "steps": ["打开学生界面", "验证显示如"2月17日 星期一"格式的日期"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 12,
     "category": "functional",
     "description": "最高/最低温度显示",
     "steps": ["查看英雄区或温度区域", "验证显示最高温和最低温，格式如"最高 25° 最低 15°""],
-    "passes": false
+    "passes": true
   },
   {
     "id": 13,
     "category": "functional",
     "description": "未来天气预报：显示未来 3-5 天的天气预报列表",
     "steps": ["向下滚动", "验证显示多天预报", "每天包含日期/星期、天气图标、高低温"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 14,
     "category": "functional",
     "description": "穿着推荐模块：显示穿着建议文字和图标",
     "steps": ["向下滚动到穿着推荐区域", "验证显示如"建议穿外套"等文字和对应图标"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 15,
     "category": "functional",
     "description": "多城市支持：左右滑动可切换不同城市",
     "steps": ["配置至少2个城市", "在学生界面左右滑动", "验证城市和天气数据切换"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 16,
     "category": "functional",
     "description": "多城市圆点指示器：底部显示当前城市位置的圆点",
     "steps": ["配置多个城市", "查看底部圆点指示器", "滑动切换时圆点跟随变化"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 17,
     "category": "functional",
     "description": "语音播报：点击按钮后用中文朗读当前天气信息",
     "steps": ["点击语音播报按钮", "验证浏览器 TTS 朗读天气摘要", "内容包含城市、天气、温度"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 18,
     "category": "functional",
     "description": "管理界面入口：长按城市名称 3 秒触发密码输入框",
     "steps": ["在学生界面长按城市名称 3 秒", "验证弹出密码输入对话框"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 19,
     "category": "functional",
     "description": "管理界面密码验证：输入正确密码 1234 进入，错误密码拒绝",
     "steps": ["长按触发密码框", "输入错误密码验证被拒绝", "输入 1234 验证成功进入管理界面"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 20,
     "category": "functional",
     "description": "管理界面：城市列表展示，可添加新城市",
     "steps": ["进入管理界面", "查看城市列表", "点击添加按钮创建新城市", "验证新城市出现在列表中"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 21,
     "category": "functional",
     "description": "管理界面：删除城市（至少保留一个）",
     "steps": ["进入管理界面", "删除一个城市", "验证城市被移除", "验证最后一个城市无法删除"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 22,
     "category": "functional",
     "description": "管理界面：编辑城市天气类型（下拉选择晴/多云/阴/小雨/大雨/雷雨/雪/雾）",
     "steps": ["选择一个城市", "从下拉菜单选择天气类型", "保存后返回学生界面验证天气已更新"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 23,
     "category": "functional",
     "description": "管理界面：编辑温度（当前温度、最高温、最低温）",
     "steps": ["选择一个城市", "修改三个温度值", "保存后返回学生界面验证温度已更新"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 24,
     "category": "functional",
     "description": "管理界面：编辑穿着推荐文字",
     "steps": ["选择一个城市", "修改穿着推荐文字", "保存后返回学生界面验证穿着推荐已更新"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 25,
     "category": "functional",
     "description": "管理界面：编辑未来天气预报数据（每天的天气类型和高低温）",
     "steps": ["选择一个城市", "编辑未来几天的预报数据", "保存后返回学生界面验证预报已更新"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 26,
     "category": "functional",
     "description": "预设场景：内置至少 4 个预设（夏日晴天、春天下雨、冬天下雪、秋天多云）",
     "steps": ["进入管理界面预设场景区域", "验证存在至少 4 个内置预设", "每个预设包含完整的天气数据"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 27,
     "category": "functional",
     "description": "预设场景：一键应用预设到当前城市",
     "steps": ["选择一个预设", "点击应用", "验证当前城市的天气数据被预设覆盖"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 28,
     "category": "functional",
     "description": "预设场景：自定义创建新预设",
     "steps": ["点击创建预设", "填写预设名称和天气数据", "保存后验证新预设出现在列表中"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 29,
     "category": "functional",
     "description": "预设场景：编辑和删除自定义预设（内置预设不可删除）",
     "steps": ["编辑一个自定义预设并保存", "删除一个自定义预设", "验证内置预设无删除按钮"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 30,
     "category": "functional",
     "description": "模块显隐控制：可独立控制日期、温度范围、未来预报、穿着推荐的显示/隐藏",
     "steps": ["进入管理界面显示设置", "关闭日期模块", "返回学生界面验证日期不显示", "对其他模块重复验证"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 31,
     "category": "functional",
     "description": "模块显隐状态持久化：刷新后显隐设置保持不变",
     "steps": ["设置某些模块为隐藏", "刷新页面", "验证隐藏状态保持"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 32,
     "category": "functional",
     "description": "管理界面返回：可从管理界面返回学生界面",
     "steps": ["在管理界面点击返回/关闭按钮", "验证回到学生天气展示界面"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 33,
     "category": "style",
     "description": "毛玻璃卡片效果：信息卡片使用半透明背景 + backdrop-filter blur",
     "steps": ["查看信息卡片", "验证卡片有半透明效果", "背景渐变色透过卡片可见", "边角圆润(16px)"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 34,
     "category": "style",
     "description": "天气图标为简洁几何风格 SVG，非卡通风格",
     "steps": ["查看各种天气图标", "验证图标线条简洁、几何化", "无夸张表情或卡通元素"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 35,
     "category": "style",
     "description": "整体配色克制优雅：白色文字、无粗边框、无浓重阴影",
     "steps": ["整体审视界面", "文字为白色或浅色", "无明显粗边框", "阴影柔和或无"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 36,
     "category": "style",
     "description": "系统字体栈：使用 -apple-system 等系统字体",
     "steps": ["检查 CSS font-family", "验证使用系统字体栈"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 37,
     "category": "style",
     "description": "8px 基准网格间距：元素间距为 8 的倍数",
     "steps": ["检查主要元素的 margin/padding", "验证间距为 8/16/24/32px 等"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 38,
     "category": "style",
     "description": "响应式布局：在 375px 宽度下正常显示，无水平溢出",
     "steps": ["将浏览器宽度设为 375px", "验证所有内容正常显示", "无水平滚动条"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 39,
     "category": "style",
     "description": "响应式布局：在 768px 宽度下合理利用空间",
     "steps": ["将浏览器宽度设为 768px", "验证布局合理", "内容居中且不过度拉伸"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 40,
     "category": "functional",
     "description": "天气动画-雨滴：雨天时屏幕上有雨滴下落动画",
     "steps": ["设置天气为小雨或大雨", "验证屏幕上有雨滴下落的动画效果"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 41,
     "category": "functional",
     "description": "天气动画-雪花：雪天时屏幕上有雪花飘落动画",
     "steps": ["设置天气为雪", "验证屏幕上有雪花飘落的动画效果"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 42,
     "category": "functional",
     "description": "天气动画-晴天光晕：晴天时有微妙的光晕/光芒效果",
     "steps": ["设置天气为晴天", "验证有柔和的光晕动画效果"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 43,
     "category": "functional",
     "description": "天气动画-雷电：雷雨时有闪电效果",
     "steps": ["设置天气为雷雨", "验证有间歇性闪电闪烁效果"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 44,
     "category": "functional",
     "description": "PWA 支持：可安装到手机桌面，离线可访问",
     "steps": ["配置 manifest.json 和 service worker", "验证浏览器提示可安装", "断网后仍可打开应用"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 45,
     "category": "style",
     "description": "管理界面布局清晰：表单元素大小适中，操作按钮明确",
     "steps": ["进入管理界面", "验证表单布局清晰", "按钮可点击区域足够大", "操作逻辑直观"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 46,
     "category": "functional",
     "description": "触摸友好：所有可点击元素最小 44x44px 触摸区域",
     "steps": ["检查按钮和交互元素", "验证触摸区域不小于 44x44px"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 47,
     "category": "functional",
     "description": "数据验证：温度输入限制合理范围（-50 到 50），非法输入有提示",
     "steps": ["在管理界面输入超范围温度", "验证有错误提示", "输入非数字验证被阻止"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 48,
     "category": "style",
     "description": "未来预报卡片：每天一行，包含星期、天气图标、高低温，排列整齐",
     "steps": ["查看未来预报区域", "验证每天信息在一行内", "图标和文字对齐整齐"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 49,
     "category": "functional",
     "description": "npm run build 可成功构建生产版本，无报错",
     "steps": ["运行 npm run build", "验证构建成功", "dist 目录生成完整文件"],
-    "passes": false
+    "passes": true
   },
   {
     "id": 50,

@@ -16,3 +16,13 @@
 - 下一步：逐个验证 feature_list.json 中的功能
 
 状态：0/50 tests passing (0%)
+
+## Session 1 - 功能验证与补充
+- 验证并标记了 49/50 个功能为通过
+- 新增 PWA 支持 (vite-plugin-pwa)：manifest.webmanifest + service worker
+- 新增温度输入验证：范围 -50 到 50，超范围自动修正并提示
+- 修复了 TypeScript 类型检查错误（未使用变量、无效编译选项）
+- 剩余 1 个功能 (#50 整体视觉一致性) 需要用户在浏览器中视觉验证
+- 下一步：用户运行 npm run dev 在浏览器中验证视觉效果
+
+状态：49/50 tests passing (98%)

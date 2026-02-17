@@ -68,13 +68,16 @@
             </select>
 
             <label class="field-label">当前温度</label>
-            <input v-model.number="selectedCity.temperature" type="number" min="-50" max="50" class="field-input" />
+            <input v-model.number="selectedCity.temperature" type="number" min="-50" max="50" class="field-input" @input="validateTemp('temperature')" />
+            <div v-if="tempErrors.temperature" class="field-error">{{ tempErrors.temperature }}</div>
 
             <label class="field-label">最高温度</label>
-            <input v-model.number="selectedCity.high" type="number" min="-50" max="50" class="field-input" />
+            <input v-model.number="selectedCity.high" type="number" min="-50" max="50" class="field-input" @input="validateTemp('high')" />
+            <div v-if="tempErrors.high" class="field-error">{{ tempErrors.high }}</div>
 
             <label class="field-label">最低温度</label>
-            <input v-model.number="selectedCity.low" type="number" min="-50" max="50" class="field-input" />
+            <input v-model.number="selectedCity.low" type="number" min="-50" max="50" class="field-input" @input="validateTemp('low')" />
+            <div v-if="tempErrors.low" class="field-error">{{ tempErrors.low }}</div>
 
             <label class="field-label">穿着推荐</label>
             <input v-model="selectedCity.clothingTip" class="field-input" />
@@ -257,6 +260,26 @@ function doRemovePreset(id: string) {
   removePreset(id)
 }
 
+// Temperature validation
+const tempErrors = reactive<Record<string, string>>({
+  temperature: '',
+  high: '',
+  low: '',
+})
+
+function validateTemp(field: 'temperature' | 'high' | 'low') {
+  if (!selectedCity.value) return
+  const val = selectedCity.value[field]
+  if (typeof val !== 'number' || isNaN(val)) {
+    tempErrors[field] = '请输入有效数字'
+  } else if (val < -50 || val > 50) {
+    tempErrors[field] = '温度范围：-50 到 50'
+    selectedCity.value[field] = Math.max(-50, Math.min(50, val))
+  } else {
+    tempErrors[field] = ''
+  }
+}
+
 // Display toggles
 const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   { key: 'showDate', label: '日期和星期' },
@@ -420,6 +443,11 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
 }
 .field-input:focus {
   border-color: #4A90D9;
+}
+.field-error {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 2px;
 }
 .field-input.small {
   width: auto;
