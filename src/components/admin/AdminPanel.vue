@@ -191,6 +191,11 @@
       </div>
     </div>
 
+    <!-- Toast notification -->
+    <Transition name="toast">
+      <div v-if="toastMsg" class="toast">{{ toastMsg }}</div>
+    </Transition>
+
     <!-- Add city dialog -->
     <div v-if="showAddCity" class="modal-overlay" @click.self="showAddCity = false">
       <div class="modal-box">
@@ -206,7 +211,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watch } from 'vue'
 import { store, addCity, removeCity, applyPreset, addPreset, removePreset } from '@/store'
 import { WEATHER_LABELS, WEATHER_TYPES } from '@/utils/weather-config'
 import { CLOTHING_ICONS } from '@/utils/clothing-icons'
@@ -279,7 +284,9 @@ const newPreset = reactive({
 
 function applyPresetToCity(presetId: string) {
   if (!selectedCity.value) return
+  const preset = store.presets.find((p) => p.id === presetId)
   applyPreset(selectedCity.value.id, presetId)
+  showToast(`已应用「${preset?.name || '预设'}」`)
 }
 
 function doCreatePreset() {
@@ -325,6 +332,27 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   { key: 'showForecast', label: '未来天气预报' },
   { key: 'showClothing', label: '穿着推荐' },
 ]
+
+// Toast notification
+const toastMsg = ref('')
+let toastTimer: ReturnType<typeof setTimeout> | null = null
+
+function showToast(msg: string) {
+  toastMsg.value = msg
+  if (toastTimer) clearTimeout(toastTimer)
+  toastTimer = setTimeout(() => { toastMsg.value = '' }, 1500)
+}
+
+// Auto-save toast (debounced)
+let saveTimer: ReturnType<typeof setTimeout> | null = null
+watch(
+  () => selectedCity.value ? JSON.stringify(selectedCity.value) : '',
+  () => {
+    if (!selectedCity.value) return
+    if (saveTimer) clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => showToast('已自动保存'), 800)
+  },
+)
 </script>
 
 <style scoped>
@@ -738,5 +766,31 @@ select.field-input option {
 .modal-btn.confirm {
   background: #4A90D9;
   color: #fff;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-size: 14px;
+  z-index: 200;
+  pointer-events: none;
+}
+.toast-enter-active,
+.toast-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(10px);
 }
 </style>
