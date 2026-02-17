@@ -219,6 +219,7 @@ function speak() {
   flex-direction: column;
   align-items: center;
   padding: 60px 24px 120px;
+  padding-top: calc(60px + env(safe-area-inset-top, 0));
   max-width: 428px;
   margin: 0 auto;
 }

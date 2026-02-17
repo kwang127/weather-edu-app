@@ -307,6 +307,7 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   background: #0f0f1a;
   color: #fff;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .admin-header {
@@ -314,6 +315,7 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   align-items: center;
   justify-content: space-between;
   padding: 16px;
+  padding-top: calc(16px + env(safe-area-inset-top, 0));
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 .back-btn {
@@ -357,8 +359,10 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
 
 .admin-body {
   padding: 16px;
+  padding-bottom: 40px;
   max-width: 500px;
   margin: 0 auto;
+  overflow-y: auto;
 }
 
 .section-header {
@@ -466,12 +470,20 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   min-width: 0;
 }
 .field-input.tiny {
-  width: 60px;
+  width: 70px;
   flex: none;
+  text-align: center;
 }
 
 select.field-input {
-  appearance: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  color-scheme: dark;
 }
 select.field-input option {
   background: #1c1c2e;
