@@ -17,6 +17,7 @@ function createDefaultCity(): CityWeather {
     high: 30,
     low: 18,
     clothingTip: '天气晴朗，建议穿短袖',
+    clothingIcon: 'shirt',
     forecast: [
       { dayLabel: '明天', weatherType: 'sunny', high: 31, low: 19 },
       { dayLabel: '后天', weatherType: 'cloudy', high: 28, low: 17 },
@@ -39,6 +40,7 @@ function createBuiltInPresets(): Preset[] {
       high: 38,
       low: 26,
       clothingTip: '天气炎热，建议穿短袖短裤，注意防晒',
+      clothingIcon: 'sun',
       forecast: [
         { dayLabel: '明天', weatherType: 'sunny', high: 37, low: 27 },
         { dayLabel: '后天', weatherType: 'sunny', high: 36, low: 25 },
@@ -55,6 +57,7 @@ function createBuiltInPresets(): Preset[] {
       high: 20,
       low: 12,
       clothingTip: '下雨天，记得带伞，穿外套',
+      clothingIcon: 'umbrella',
       forecast: [
         { dayLabel: '明天', weatherType: 'light-rain', high: 18, low: 11 },
         { dayLabel: '后天', weatherType: 'cloudy', high: 22, low: 13 },
@@ -71,6 +74,7 @@ function createBuiltInPresets(): Preset[] {
       high: -2,
       low: -10,
       clothingTip: '下雪天很冷，要穿羽绒服、戴帽子和手套',
+      clothingIcon: 'snowflake',
       forecast: [
         { dayLabel: '明天', weatherType: 'snow', high: -1, low: -8 },
         { dayLabel: '后天', weatherType: 'overcast', high: 0, low: -6 },
@@ -87,6 +91,7 @@ function createBuiltInPresets(): Preset[] {
       high: 22,
       low: 12,
       clothingTip: '天气凉爽，建议穿长袖外套',
+      clothingIcon: 'jacket',
       forecast: [
         { dayLabel: '明天', weatherType: 'cloudy', high: 20, low: 11 },
         { dayLabel: '后天', weatherType: 'overcast', high: 18, low: 10 },
@@ -117,6 +122,13 @@ function loadState(): AppState {
     if (raw) {
       const parsed = JSON.parse(raw) as AppState
       if (parsed.cities && parsed.cities.length > 0) {
+        // Migrate: add clothingIcon if missing
+        for (const city of parsed.cities) {
+          if (!city.clothingIcon) city.clothingIcon = 'shirt'
+        }
+        for (const preset of parsed.presets) {
+          if (!preset.clothingIcon) preset.clothingIcon = 'shirt'
+        }
         // Ensure built-in presets always exist
         const existingBuiltInIds = parsed.presets
           .filter((p) => p.builtIn)
@@ -188,6 +200,7 @@ export function applyPreset(cityId: string, presetId: string): void {
     city.high = preset.high
     city.low = preset.low
     city.clothingTip = preset.clothingTip
+    city.clothingIcon = preset.clothingIcon
     city.forecast = JSON.parse(JSON.stringify(preset.forecast))
   }
 }

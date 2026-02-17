@@ -59,7 +59,7 @@
       <div v-if="displaySettings.showClothing && city.clothingTip" class="glass-card clothing-card">
         <div class="card-title">穿着建议</div>
         <div class="clothing-content">
-          <span class="clothing-icon">{{ clothingEmoji }}</span>
+          <component :is="clothingIconComponent" :size="32" class="clothing-icon" />
           <span>{{ city.clothingTip }}</span>
         </div>
       </div>
@@ -112,6 +112,7 @@
 import { ref, computed } from 'vue'
 import { store } from '@/store'
 import { WEATHER_LABELS, getWeatherGradient } from '@/utils/weather-config'
+import { CLOTHING_ICON_MAP } from '@/utils/clothing-icons'
 import WeatherIcon from '@/components/icons/WeatherIcon.vue'
 import WeatherAnimation from './WeatherAnimation.vue'
 
@@ -136,13 +137,9 @@ const formattedDate = computed(() => {
   return `${now.getMonth() + 1}月${now.getDate()}日 ${weekdays[now.getDay()]}`
 })
 
-const clothingEmoji = computed(() => {
-  const t = city.value.temperature
-  if (t >= 30) return '👕'
-  if (t >= 20) return '👔'
-  if (t >= 10) return '🧥'
-  return '🧣'
-})
+const clothingIconComponent = computed(() =>
+  CLOTHING_ICON_MAP[city.value.clothingIcon] || CLOTHING_ICON_MAP['shirt']
+)
 
 // Swipe handling
 const slideDirection = ref('slide-left')
@@ -329,7 +326,8 @@ function speak() {
   font-weight: 300;
 }
 .clothing-icon {
-  font-size: 32px;
+  flex-shrink: 0;
+  opacity: 0.9;
 }
 
 /* TTS button */

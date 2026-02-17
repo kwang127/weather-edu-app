@@ -76,6 +76,21 @@
             <label class="field-label">穿着推荐</label>
             <input v-model="selectedCity.clothingTip" class="field-input" />
 
+            <label class="field-label">穿着图标</label>
+            <div class="icon-picker">
+              <button
+                v-for="icon in clothingIcons"
+                :key="icon.id"
+                class="icon-pick-btn"
+                :class="{ active: selectedCity.clothingIcon === icon.id }"
+                @click="selectedCity!.clothingIcon = icon.id"
+                :title="icon.label"
+              >
+                <component :is="icon.component" :size="22" />
+                <span class="icon-pick-label">{{ icon.label }}</span>
+              </button>
+            </div>
+
             <!-- Forecast editor -->
             <div class="forecast-editor">
               <div class="section-header">
@@ -141,6 +156,20 @@
             <input v-model.number="newPreset.low" type="number" class="modal-input" />
             <label class="field-label">穿着推荐</label>
             <input v-model="newPreset.clothingTip" class="modal-input" />
+            <label class="field-label">穿着图标</label>
+            <div class="icon-picker">
+              <button
+                v-for="icon in clothingIcons"
+                :key="icon.id"
+                class="icon-pick-btn"
+                :class="{ active: newPreset.clothingIcon === icon.id }"
+                @click="newPreset.clothingIcon = icon.id"
+                :title="icon.label"
+              >
+                <component :is="icon.component" :size="22" />
+                <span class="icon-pick-label">{{ icon.label }}</span>
+              </button>
+            </div>
             <div class="modal-actions">
               <button class="modal-btn cancel" @click="showCreatePreset = false">取消</button>
               <button class="modal-btn confirm" @click="doCreatePreset">创建</button>
@@ -180,12 +209,14 @@
 import { ref, computed, reactive } from 'vue'
 import { store, addCity, removeCity, applyPreset, addPreset, removePreset } from '@/store'
 import { WEATHER_LABELS, WEATHER_TYPES } from '@/utils/weather-config'
-import type { DisplaySettings } from '@/types/weather'
+import { CLOTHING_ICONS } from '@/utils/clothing-icons'
+import type { DisplaySettings, ClothingIcon } from '@/types/weather'
 
 defineEmits<{ (e: 'back'): void }>()
 
 const weatherLabels = WEATHER_LABELS
 const weatherTypes = WEATHER_TYPES
+const clothingIcons = CLOTHING_ICONS
 
 const activeTab = ref<'cities' | 'presets' | 'display'>('cities')
 const tabs = [
@@ -242,6 +273,7 @@ const newPreset = reactive({
   high: 30,
   low: 18,
   clothingTip: '',
+  clothingIcon: 'shirt' as ClothingIcon,
   forecast: [] as any[],
 })
 
@@ -259,6 +291,7 @@ function doCreatePreset() {
   newPreset.high = 30
   newPreset.low = 18
   newPreset.clothingTip = ''
+  newPreset.clothingIcon = 'shirt'
 }
 
 function doRemovePreset(id: string) {
@@ -467,6 +500,35 @@ const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
   width: 70px;
   flex: none;
   text-align: center;
+}
+
+/* Icon picker */
+.icon-picker {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+.icon-pick-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid transparent;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.6);
+  cursor: pointer;
+  min-height: 56px;
+}
+.icon-pick-btn.active {
+  border-color: #4A90D9;
+  color: #fff;
+  background: rgba(74,144,217,0.15);
+}
+.icon-pick-label {
+  font-size: 11px;
 }
 
 select.field-input {

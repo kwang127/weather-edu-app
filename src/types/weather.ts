@@ -17,6 +17,18 @@ export interface ForecastDay {
   low: number
 }
 
+export type ClothingIcon =
+  | 'shirt'
+  | 'umbrella'
+  | 'glasses'
+  | 'snowflake'
+  | 'sun'
+  | 'cloud-rain-wind'
+  | 'wind'
+  | 'thermometer'
+  | 'jacket'
+  | 'footprints'
+
 export interface CityWeather {
   id: string
   name: string
@@ -26,6 +38,7 @@ export interface CityWeather {
   high: number
   low: number
   clothingTip: string
+  clothingIcon: ClothingIcon
   forecast: ForecastDay[]
 }
 
@@ -46,6 +59,7 @@ export interface Preset {
   high: number
   low: number
   clothingTip: string
+  clothingIcon: ClothingIcon
   forecast: ForecastDay[]
 }
 
