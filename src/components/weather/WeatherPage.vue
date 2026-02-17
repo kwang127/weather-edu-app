@@ -7,7 +7,8 @@
   >
     <WeatherAnimation :type="city.weatherType" />
 
-    <div class="weather-content" :key="city.id">
+    <Transition :name="slideDirection" mode="out-in">
+      <div class="weather-content" :key="city.id">
       <!-- City name (long press to enter admin) -->
       <div
         class="city-name"
@@ -73,6 +74,7 @@
         <span>语音播报</span>
       </button>
     </div>
+    </Transition>
 
     <!-- City dots indicator -->
     <div v-if="cities.length > 1" class="city-dots">
@@ -143,6 +145,7 @@ const clothingEmoji = computed(() => {
 })
 
 // Swipe handling
+const slideDirection = ref('slide-left')
 let touchStartX = 0
 function onTouchStart(e: TouchEvent) {
   touchStartX = e.touches[0].clientX
@@ -151,8 +154,10 @@ function onTouchEnd(e: TouchEvent) {
   const diff = e.changedTouches[0].clientX - touchStartX
   if (Math.abs(diff) < 50) return
   if (diff < 0 && store.activeCityIndex < store.cities.length - 1) {
+    slideDirection.value = 'slide-left'
     store.activeCityIndex++
   } else if (diff > 0 && store.activeCityIndex > 0) {
+    slideDirection.value = 'slide-right'
     store.activeCityIndex--
   }
 }
@@ -426,5 +431,29 @@ function speak() {
 .modal-btn.confirm {
   background: #4A90D9;
   color: #fff;
+}
+
+/* Slide transitions */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.slide-left-enter-from {
+  transform: translateX(60px);
+  opacity: 0;
+}
+.slide-left-leave-to {
+  transform: translateX(-60px);
+  opacity: 0;
+}
+.slide-right-enter-from {
+  transform: translateX(-60px);
+  opacity: 0;
+}
+.slide-right-leave-to {
+  transform: translateX(60px);
+  opacity: 0;
 }
 </style>

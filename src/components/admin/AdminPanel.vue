@@ -88,14 +88,20 @@
                 <span>未来天气预报</span>
                 <button class="add-btn" @click="addForecastDay">+ 添加</button>
               </div>
-              <div v-for="(day, idx) in selectedCity.forecast" :key="idx" class="forecast-edit-row">
-                <input v-model="day.dayLabel" class="field-input small" placeholder="日期" />
-                <select v-model="day.weatherType" class="field-input small">
-                  <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
-                </select>
-                <input v-model.number="day.high" type="number" class="field-input tiny" placeholder="高" />
-                <input v-model.number="day.low" type="number" class="field-input tiny" placeholder="低" />
-                <button class="delete-btn small" @click="selectedCity!.forecast.splice(idx, 1)">×</button>
+              <div v-for="(day, idx) in selectedCity.forecast" :key="idx" class="forecast-edit-item">
+                <div class="forecast-edit-top">
+                  <input v-model="day.dayLabel" class="field-input" placeholder="日期" style="flex:1" />
+                  <select v-model="day.weatherType" class="field-input" style="flex:1.5">
+                    <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
+                  </select>
+                  <button class="delete-btn small" @click="selectedCity!.forecast.splice(idx, 1)">×</button>
+                </div>
+                <div class="forecast-edit-bottom">
+                  <label class="inline-label">最高</label>
+                  <input v-model.number="day.high" type="number" class="field-input tiny" />
+                  <label class="inline-label">最低</label>
+                  <input v-model.number="day.low" type="number" class="field-input tiny" />
+                </div>
               </div>
             </div>
           </div>
@@ -476,11 +482,27 @@ select.field-input option {
 .forecast-editor {
   margin-top: 16px;
 }
-.forecast-edit-row {
+.forecast-edit-item {
+  background: rgba(255,255,255,0.04);
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 8px;
+}
+.forecast-edit-top {
   display: flex;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+}
+.forecast-edit-bottom {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.inline-label {
+  font-size: 13px;
+  opacity: 0.6;
+  white-space: nowrap;
 }
 
 /* Presets */
