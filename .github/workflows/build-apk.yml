@@ -27,7 +27,14 @@ jobs:
 
       - name: Build debug APK
         working-directory: android
-        run: chmod +x gradlew && ./gradlew assembleDebug
+        run: chmod +x gradlew && ./gradlew assembleDebug --stacktrace 2>&1 | tee build-output.txt
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log
+          path: android/build-output.txt
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
