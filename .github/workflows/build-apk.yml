@@ -13,12 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -27,18 +21,6 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build web app
-        run: npm run build
-
-      - name: Copy web assets to Android
-        run: npx cap copy android
-
-      - name: Update Android plugins
-        run: npx cap update android
 
       - name: Build debug APK
         working-directory: android
