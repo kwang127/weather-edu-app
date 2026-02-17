@@ -34,24 +34,11 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Debug info
-        run: |
-          echo "Node: $(node -v)"
-          echo "NPM: $(npm -v)"
-          echo "ANDROID_HOME: $ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
-          ls -la android/ || echo "No android dir"
-          cat capacitor.config.json
-          npx cap --version || echo "cap not found"
-
       - name: Copy web assets to Android
-        run: npx cap copy android --verbose 2>&1 || true
+        run: npx cap copy android
 
       - name: Update Android plugins
-        run: npx cap update android --verbose 2>&1 || true
-
-      - name: Sync Capacitor to Android
-        run: npx cap sync android --verbose
+        run: npx cap update android
 
       - name: Build debug APK
         working-directory: android
