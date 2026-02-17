@@ -33,8 +33,8 @@
         class="raindrop"
         :style="rainStyle(i)"
       />
-      <div class="lightning" :style="{ animationDelay: '2s' }" />
-      <div class="lightning lightning-2" :style="{ animationDelay: '5s' }" />
+      <div class="lightning-glow lightning-glow-1" />
+      <div class="lightning-glow lightning-glow-2" />
     </template>
   </div>
 </template>
@@ -157,36 +157,60 @@ function snowStyle(i: number) {
   }
 }
 
-/* Lightning */
-.lightning {
+/* Lightning — soft radial glow flashes from sky */
+.lightning-glow {
   position: absolute;
-  top: 0;
-  left: 30%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0);
-  animation: lightning-flash 7s infinite;
+  top: -30%;
+  width: 140%;
+  height: 80%;
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
 }
 
-.lightning-2 {
-  left: 60%;
+.lightning-glow-1 {
+  left: -20%;
+  background: radial-gradient(
+    ellipse at 50% 0%,
+    rgba(200, 210, 255, 0.45) 0%,
+    rgba(180, 200, 255, 0.15) 30%,
+    transparent 70%
+  );
+  animation: flash-1 8s ease-in-out infinite;
 }
 
-@keyframes lightning-flash {
-  0%, 100% {
-    background: transparent;
-  }
-  1% {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  2% {
-    background: transparent;
-  }
-  3% {
-    background: rgba(255, 255, 255, 0.15);
-  }
-  4% {
-    background: transparent;
-  }
+.lightning-glow-2 {
+  left: 10%;
+  background: radial-gradient(
+    ellipse at 60% 0%,
+    rgba(220, 220, 255, 0.35) 0%,
+    rgba(190, 200, 255, 0.1) 35%,
+    transparent 65%
+  );
+  animation: flash-2 8s ease-in-out 3.5s infinite;
+}
+
+@keyframes flash-1 {
+  0%, 100% { opacity: 0; }
+  /* first flicker */
+  10% { opacity: 0; }
+  10.5% { opacity: 1; }
+  11% { opacity: 0.15; }
+  11.5% { opacity: 0.85; }
+  12.5% { opacity: 0; }
+  /* brief afterglow */
+  13% { opacity: 0.2; }
+  14% { opacity: 0; }
+}
+
+@keyframes flash-2 {
+  0%, 100% { opacity: 0; }
+  15% { opacity: 0; }
+  15.3% { opacity: 0.9; }
+  15.8% { opacity: 0.1; }
+  16.3% { opacity: 0.7; }
+  17% { opacity: 0.05; }
+  17.5% { opacity: 0.5; }
+  18.5% { opacity: 0; }
 }
 </style>
