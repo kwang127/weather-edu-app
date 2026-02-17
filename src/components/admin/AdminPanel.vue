@@ -126,9 +126,12 @@
 
         <div v-if="selectedCity" class="preset-hint">当前城市：{{ selectedCity.name }}</div>
 
-        <div v-for="preset in store.presets" :key="preset.id" class="preset-item">
+        <div v-for="preset in store.presets" :key="preset.id" class="preset-item" :class="{ 'preset-applied': selectedCity && selectedCity.appliedPresetId === preset.id }">
           <div class="preset-info">
-            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-name">
+              {{ preset.name }}
+              <span v-if="selectedCity && selectedCity.appliedPresetId === preset.id" class="preset-applied-tag">当前</span>
+            </span>
             <span class="preset-badge" v-if="preset.builtIn">内置</span>
             <span class="preset-detail">{{ weatherLabels[preset.weatherType] }} {{ preset.temperature }}°</span>
           </div>
@@ -615,6 +618,21 @@ select.field-input option {
   background: rgba(255,255,255,0.06);
   border-radius: 10px;
   margin-bottom: 8px;
+  border: 2px solid transparent;
+}
+.preset-item.preset-applied {
+  border-color: #4A90D9;
+  background: rgba(74,144,217,0.08);
+}
+.preset-applied-tag {
+  display: inline-block;
+  font-size: 11px;
+  background: #4A90D9;
+  color: #fff;
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 .preset-info {
   display: flex;

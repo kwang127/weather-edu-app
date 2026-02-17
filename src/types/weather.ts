@@ -35,6 +35,7 @@ export interface CityWeather {
   clothingTip: string
   clothingIcon: ClothingIcon
   forecast: ForecastDay[]
+  appliedPresetId?: string
 }
 
 export interface DisplaySettings {

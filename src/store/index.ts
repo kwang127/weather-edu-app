@@ -200,6 +200,7 @@ export function applyPreset(cityId: string, presetId: string): void {
     city.clothingTip = preset.clothingTip
     city.clothingIcon = preset.clothingIcon
     city.forecast = JSON.parse(JSON.stringify(preset.forecast))
+    city.appliedPresetId = presetId
   }
 }
 
