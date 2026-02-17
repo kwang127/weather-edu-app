@@ -34,34 +34,8 @@ jobs:
       - name: Build web app
         run: npm run build
 
-      - name: Add Capacitor Android platform
-        run: npx cap add android
-
-      - name: Sync Capacitor
+      - name: Sync Capacitor to Android
         run: npx cap sync android
-
-      - name: Generate Android adaptive icons
-        run: |
-          # Generate icon PNGs for all Android densities from our source icon
-          sudo apt-get install -y imagemagick
-          ICON_SRC="public/icon-512x512.png"
-          declare -A SIZES=(
-            ["mdpi"]=48 ["hdpi"]=72 ["xhdpi"]=96
-            ["xxhdpi"]=144 ["xxxhdpi"]=192
-          )
-          declare -A FG_SIZES=(
-            ["mdpi"]=108 ["hdpi"]=162 ["xhdpi"]=216
-            ["xxhdpi"]=324 ["xxxhdpi"]=432
-          )
-          for density in "${!SIZES[@]}"; do
-            DIR="android/app/src/main/res/mipmap-${density}"
-            mkdir -p "$DIR"
-            SIZE=${SIZES[$density]}
-            FG=${FG_SIZES[$density]}
-            convert "$ICON_SRC" -resize "${SIZE}x${SIZE}" "$DIR/ic_launcher.png"
-            convert "$ICON_SRC" -resize "${SIZE}x${SIZE}" "$DIR/ic_launcher_round.png"
-            convert "$ICON_SRC" -resize "${FG}x${FG}" "$DIR/ic_launcher_foreground.png"
-          done
 
       - name: Build debug APK
         working-directory: android

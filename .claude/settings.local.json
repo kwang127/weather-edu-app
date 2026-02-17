@@ -27,7 +27,11 @@
       "Bash(git push:*)",
       "Bash(npx cap init:*)",
       "Bash(npm ls:*)",
-      "Bash(python:*)"
+      "Bash(python:*)",
+      "Bash(gh run list:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl:*)",
+      "Bash(npx cap:*)"
     ]
   }
 }
