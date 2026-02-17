@@ -1,0 +1,615 @@
+<template>
+  <div class="admin-page">
+    <header class="admin-header">
+      <button class="back-btn" @click="$emit('back')">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        返回
+      </button>
+      <h1 class="admin-title">管理设置</h1>
+      <div style="width:60px"></div>
+    </header>
+
+    <!-- Tab navigation -->
+    <div class="tab-bar">
+      <button
+        v-for="tab in tabs"
+        :key="tab.id"
+        class="tab-btn"
+        :class="{ active: activeTab === tab.id }"
+        @click="activeTab = tab.id"
+      >{{ tab.label }}</button>
+    </div>
+
+    <div class="admin-body">
+      <!-- Cities Tab -->
+      <div v-if="activeTab === 'cities'" class="tab-content">
+        <div class="section-header">
+          <span>城市列表</span>
+          <button class="add-btn" @click="showAddCity = true">+ 添加城市</button>
+        </div>
+
+        <div
+          v-for="c in store.cities"
+          :key="c.id"
+          class="city-item"
+          :class="{ selected: selectedCityId === c.id }"
+          @click="selectedCityId = c.id"
+        >
+          <div class="city-item-info">
+            <span class="city-item-name">{{ c.name }}</span>
+            <span class="city-item-weather">{{ weatherLabels[c.weatherType] }} {{ c.temperature }}°</span>
+          </div>
+          <button
+            v-if="store.cities.length > 1"
+            class="delete-btn"
+            @click.stop="deleteCity(c.id)"
+          >删除</button>
+        </div>
+
+        <!-- City editor -->
+        <template v-if="selectedCity">
+          <div class="editor-section">
+            <h3 class="editor-title">编辑：{{ selectedCity.name }}</h3>
+
+            <label class="field-label">城市名称</label>
+            <input v-model="selectedCity.name" class="field-input" />
+
+            <label class="field-label">天气类型</label>
+            <select v-model="selectedCity.weatherType" class="field-input">
+              <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
+            </select>
+
+            <label class="field-label">时段</label>
+            <select v-model="selectedCity.timeOfDay" class="field-input">
+              <option value="day">白天</option>
+              <option value="night">夜晚</option>
+            </select>
+
+            <label class="field-label">当前温度</label>
+            <input v-model.number="selectedCity.temperature" type="number" min="-50" max="50" class="field-input" />
+
+            <label class="field-label">最高温度</label>
+            <input v-model.number="selectedCity.high" type="number" min="-50" max="50" class="field-input" />
+
+            <label class="field-label">最低温度</label>
+            <input v-model.number="selectedCity.low" type="number" min="-50" max="50" class="field-input" />
+
+            <label class="field-label">穿着推荐</label>
+            <input v-model="selectedCity.clothingTip" class="field-input" />
+
+            <!-- Forecast editor -->
+            <div class="forecast-editor">
+              <div class="section-header">
+                <span>未来天气预报</span>
+                <button class="add-btn" @click="addForecastDay">+ 添加</button>
+              </div>
+              <div v-for="(day, idx) in selectedCity.forecast" :key="idx" class="forecast-edit-row">
+                <input v-model="day.dayLabel" class="field-input small" placeholder="日期" />
+                <select v-model="day.weatherType" class="field-input small">
+                  <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
+                </select>
+                <input v-model.number="day.high" type="number" class="field-input tiny" placeholder="高" />
+                <input v-model.number="day.low" type="number" class="field-input tiny" placeholder="低" />
+                <button class="delete-btn small" @click="selectedCity!.forecast.splice(idx, 1)">×</button>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+
+      <!-- Presets Tab -->
+      <div v-if="activeTab === 'presets'" class="tab-content">
+        <div class="section-header">
+          <span>预设场景</span>
+          <button class="add-btn" @click="showCreatePreset = true">+ 新建预设</button>
+        </div>
+
+        <div v-if="selectedCity" class="preset-hint">当前城市：{{ selectedCity.name }}</div>
+
+        <div v-for="preset in store.presets" :key="preset.id" class="preset-item">
+          <div class="preset-info">
+            <span class="preset-name">{{ preset.name }}</span>
+            <span class="preset-badge" v-if="preset.builtIn">内置</span>
+            <span class="preset-detail">{{ weatherLabels[preset.weatherType] }} {{ preset.temperature }}°</span>
+          </div>
+          <div class="preset-actions">
+            <button class="action-btn" @click="applyPresetToCity(preset.id)" :disabled="!selectedCity">应用</button>
+            <button v-if="!preset.builtIn" class="delete-btn small" @click="doRemovePreset(preset.id)">删除</button>
+          </div>
+        </div>
+
+        <!-- Create preset dialog -->
+        <div v-if="showCreatePreset" class="modal-overlay" @click.self="showCreatePreset = false">
+          <div class="modal-box wide">
+            <div class="modal-title">新建预设</div>
+            <label class="field-label">预设名称</label>
+            <input v-model="newPreset.name" class="modal-input" placeholder="如：暴风雨天" />
+            <label class="field-label">天气类型</label>
+            <select v-model="newPreset.weatherType" class="field-input">
+              <option v-for="wt in weatherTypes" :key="wt" :value="wt">{{ weatherLabels[wt] }}</option>
+            </select>
+            <label class="field-label">温度</label>
+            <input v-model.number="newPreset.temperature" type="number" class="modal-input" />
+            <label class="field-label">最高温</label>
+            <input v-model.number="newPreset.high" type="number" class="modal-input" />
+            <label class="field-label">最低温</label>
+            <input v-model.number="newPreset.low" type="number" class="modal-input" />
+            <label class="field-label">穿着推荐</label>
+            <input v-model="newPreset.clothingTip" class="modal-input" />
+            <div class="modal-actions">
+              <button class="modal-btn cancel" @click="showCreatePreset = false">取消</button>
+              <button class="modal-btn confirm" @click="doCreatePreset">创建</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Display Tab -->
+      <div v-if="activeTab === 'display'" class="tab-content">
+        <h3 class="editor-title">模块显示控制</h3>
+        <div class="toggle-row" v-for="item in displayToggles" :key="item.key">
+          <span>{{ item.label }}</span>
+          <label class="toggle-switch">
+            <input type="checkbox" v-model="store.displaySettings[item.key]" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add city dialog -->
+    <div v-if="showAddCity" class="modal-overlay" @click.self="showAddCity = false">
+      <div class="modal-box">
+        <div class="modal-title">添加城市</div>
+        <input v-model="newCityName" class="modal-input" placeholder="输入城市名称" @keyup.enter="doAddCity" />
+        <div class="modal-actions">
+          <button class="modal-btn cancel" @click="showAddCity = false">取消</button>
+          <button class="modal-btn confirm" @click="doAddCity">添加</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, reactive } from 'vue'
+import { store, addCity, removeCity, applyPreset, addPreset, removePreset } from '@/store'
+import { WEATHER_LABELS, WEATHER_TYPES } from '@/utils/weather-config'
+import type { DisplaySettings } from '@/types/weather'
+
+defineEmits<{ (e: 'back'): void }>()
+
+const weatherLabels = WEATHER_LABELS
+const weatherTypes = WEATHER_TYPES
+
+const activeTab = ref<'cities' | 'presets' | 'display'>('cities')
+const tabs = [
+  { id: 'cities' as const, label: '城市管理' },
+  { id: 'presets' as const, label: '预设场景' },
+  { id: 'display' as const, label: '显示设置' },
+]
+
+// City management
+const selectedCityId = ref(store.cities[0]?.id || '')
+const selectedCity = computed(() => store.cities.find((c) => c.id === selectedCityId.value))
+
+const showAddCity = ref(false)
+const newCityName = ref('')
+
+function doAddCity() {
+  const name = newCityName.value.trim()
+  if (!name) return
+  const city = addCity(name)
+  selectedCityId.value = city.id
+  newCityName.value = ''
+  showAddCity.value = false
+}
+
+function deleteCity(id: string) {
+  removeCity(id)
+  if (selectedCityId.value === id) {
+    selectedCityId.value = store.cities[0]?.id || ''
+  }
+}
+
+function addForecastDay() {
+  if (!selectedCity.value) return
+  selectedCity.value.forecast.push({
+    dayLabel: '新一天',
+    weatherType: 'sunny',
+    high: 25,
+    low: 15,
+  })
+}
+
+// Presets
+const showCreatePreset = ref(false)
+const newPreset = reactive({
+  name: '',
+  weatherType: 'sunny' as const,
+  timeOfDay: 'day' as const,
+  temperature: 25,
+  high: 30,
+  low: 18,
+  clothingTip: '',
+  forecast: [] as any[],
+})
+
+function applyPresetToCity(presetId: string) {
+  if (!selectedCity.value) return
+  applyPreset(selectedCity.value.id, presetId)
+}
+
+function doCreatePreset() {
+  if (!newPreset.name.trim()) return
+  addPreset({ ...newPreset, forecast: [] })
+  showCreatePreset.value = false
+  newPreset.name = ''
+  newPreset.temperature = 25
+  newPreset.high = 30
+  newPreset.low = 18
+  newPreset.clothingTip = ''
+}
+
+function doRemovePreset(id: string) {
+  removePreset(id)
+}
+
+// Display toggles
+const displayToggles: { key: keyof DisplaySettings; label: string }[] = [
+  { key: 'showDate', label: '日期和星期' },
+  { key: 'showTempRange', label: '最高/最低温度' },
+  { key: 'showForecast', label: '未来天气预报' },
+  { key: 'showClothing', label: '穿着推荐' },
+]
+</script>
+
+<style scoped>
+.admin-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: #0f0f1a;
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.back-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #4A90D9;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 8px;
+  min-height: 44px;
+}
+.admin-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tab-bar {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 0 16px;
+}
+.tab-btn {
+  flex: 1;
+  padding: 12px 8px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  cursor: pointer;
+  min-height: 44px;
+}
+.tab-btn.active {
+  color: #4A90D9;
+  border-bottom-color: #4A90D9;
+}
+
+.admin-body {
+  padding: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.add-btn {
+  background: #4A90D9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  min-height: 36px;
+}
+
+.city-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.city-item.selected {
+  border-color: #4A90D9;
+}
+.city-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.city-item-name {
+  font-size: 16px;
+  font-weight: 500;
+}
+.city-item-weather {
+  font-size: 13px;
+  opacity: 0.5;
+}
+
+.delete-btn {
+  background: rgba(255,80,80,0.2);
+  color: #ff6b6b;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.delete-btn.small {
+  padding: 4px 8px;
+  min-height: 28px;
+  font-size: 16px;
+}
+
+.editor-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.editor-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  opacity: 0.6;
+  margin: 12px 0 4px;
+}
+.field-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+}
+.field-input:focus {
+  border-color: #4A90D9;
+}
+.field-input.small {
+  width: auto;
+  flex: 1;
+  min-width: 0;
+}
+.field-input.tiny {
+  width: 60px;
+  flex: none;
+}
+
+select.field-input {
+  appearance: auto;
+}
+
+/* Forecast editor */
+.forecast-editor {
+  margin-top: 16px;
+}
+.forecast-edit-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+/* Presets */
+.preset-hint {
+  font-size: 13px;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+.preset-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+.preset-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.preset-name {
+  font-size: 15px;
+  font-weight: 500;
+}
+.preset-badge {
+  display: inline-block;
+  font-size: 11px;
+  background: rgba(74,144,217,0.2);
+  color: #4A90D9;
+  padding: 1px 6px;
+  border-radius: 4px;
+  width: fit-content;
+}
+.preset-detail {
+  font-size: 13px;
+  opacity: 0.5;
+}
+.preset-actions {
+  display: flex;
+  gap: 6px;
+}
+.action-btn {
+  background: #4A90D9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Toggle switch */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 16px;
+}
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  display: inline-block;
+}
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: rgba(255,255,255,0.15);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+.toggle-switch input:checked + .toggle-slider {
+  background: #4A90D9;
+}
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(22px);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.modal-box {
+  background: #1c1c2e;
+  border-radius: 16px;
+  padding: 24px;
+  width: 300px;
+}
+.modal-box.wide {
+  width: 340px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.modal-title {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  text-align: center;
+}
+.modal-input {
+  width: 100%;
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  box-sizing: border-box;
+  margin-bottom: 8px;
+}
+.modal-input:focus {
+  border-color: #4A90D9;
+}
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
+.modal-btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  min-height: 44px;
+}
+.modal-btn.cancel {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+.modal-btn.confirm {
+  background: #4A90D9;
+  color: #fff;
+}
+</style>
