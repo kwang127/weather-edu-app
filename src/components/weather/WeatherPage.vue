@@ -26,11 +26,11 @@
         {{ formattedDate }}
       </div>
 
-      <!-- Hero: temperature + icon + description -->
+      <!-- Hero: icon (primary) + description + temperature (secondary) -->
       <div class="hero-section">
-        <div class="temperature">{{ city.temperature }}°</div>
-        <WeatherIcon :type="city.weatherType" :size="80" />
+        <WeatherIcon :type="city.weatherType" :size="120" />
         <div class="weather-desc">{{ weatherLabel }}</div>
+        <div class="temperature">{{ city.temperature }}°</div>
       </div>
 
       <!-- High / Low -->
@@ -244,21 +244,23 @@ function speak() {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 16px;
-}
-
-.temperature {
-  font-size: 96px;
-  font-weight: 200;
-  line-height: 1;
-  letter-spacing: -4px;
+  margin-top: 8px;
 }
 
 .weather-desc {
-  font-size: 18px;
-  font-weight: 300;
+  font-size: 20px;
+  font-weight: 400;
+  margin-top: 8px;
+  opacity: 0.9;
+}
+
+.temperature {
+  font-size: 64px;
+  font-weight: 200;
+  line-height: 1;
+  letter-spacing: -2px;
   margin-top: 4px;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 
 .temp-range {
