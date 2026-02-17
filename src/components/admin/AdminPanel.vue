@@ -285,11 +285,16 @@ const newPreset = reactive({
   forecast: [] as any[],
 })
 
+let isApplyingPreset = false
+
 function applyPresetToCity(presetId: string) {
   if (!selectedCity.value) return
   const preset = store.presets.find((p) => p.id === presetId)
+  isApplyingPreset = true
   applyPreset(selectedCity.value.id, presetId)
   showToast(`已应用「${preset?.name || '预设'}」`)
+  // Reset flag after Vue reactivity flushes
+  setTimeout(() => { isApplyingPreset = false }, 0)
 }
 
 function doCreatePreset() {
@@ -346,12 +351,15 @@ function showToast(msg: string) {
   toastTimer = setTimeout(() => { toastMsg.value = '' }, 1500)
 }
 
-// Auto-save toast (debounced)
+// Auto-save toast (debounced) + clear preset status on manual edit
 let saveTimer: ReturnType<typeof setTimeout> | null = null
 watch(
   () => selectedCity.value ? JSON.stringify(selectedCity.value) : '',
   () => {
     if (!selectedCity.value) return
+    if (!isApplyingPreset && selectedCity.value.appliedPresetId) {
+      selectedCity.value.appliedPresetId = undefined
+    }
     if (saveTimer) clearTimeout(saveTimer)
     saveTimer = setTimeout(() => showToast('已自动保存'), 800)
   },
