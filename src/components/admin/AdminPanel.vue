@@ -8,7 +8,13 @@
         返回
       </button>
       <h1 class="admin-title">管理设置</h1>
-      <div style="width:60px"></div>
+      <button class="preview-btn" @click="showPreview = true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        预览
+      </button>
     </header>
 
     <!-- Tab navigation -->
@@ -210,6 +216,19 @@
         </div>
       </div>
     </div>
+
+    <!-- Preview overlay -->
+    <Transition name="preview">
+      <div v-if="showPreview" class="preview-overlay">
+        <div class="preview-header">
+          <span class="preview-title">学生界面预览</span>
+          <button class="preview-close-btn" @click="showPreview = false">关闭</button>
+        </div>
+        <div class="preview-frame">
+          <WeatherPage @enter-admin="() => {}" />
+        </div>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -218,6 +237,7 @@ import { ref, computed, reactive, watch } from 'vue'
 import { store, addCity, removeCity, applyPreset, addPreset, removePreset } from '@/store'
 import { WEATHER_LABELS, WEATHER_TYPES } from '@/utils/weather-config'
 import { CLOTHING_ICONS } from '@/utils/clothing-icons'
+import WeatherPage from '@/components/weather/WeatherPage.vue'
 import type { DisplaySettings, ClothingIcon } from '@/types/weather'
 
 defineEmits<{ (e: 'back'): void }>()
@@ -239,6 +259,7 @@ const selectedCity = computed(() => store.cities.find((c) => c.id === selectedCi
 
 const showAddCity = ref(false)
 const newCityName = ref('')
+const showPreview = ref(false)
 
 function doAddCity() {
   const name = newCityName.value.trim()
@@ -818,5 +839,72 @@ select.field-input option {
 .toast-leave-to {
   opacity: 0;
   transform: translateX(-50%) translateY(10px);
+}
+
+/* Preview button */
+.preview-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  color: #4A90D9;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 8px;
+  min-height: 44px;
+}
+
+/* Preview overlay */
+.preview-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+}
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0));
+  background: rgba(15, 15, 26, 0.95);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+.preview-title {
+  font-size: 15px;
+  color: rgba(255,255,255,0.7);
+}
+.preview-close-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  min-height: 36px;
+}
+.preview-frame {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Preview transitions */
+.preview-enter-active,
+.preview-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+.preview-enter-from {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.preview-leave-to {
+  opacity: 0;
+  transform: translateY(100%);
 }
 </style>
