@@ -11,8 +11,8 @@
       <!-- City name (long press to enter admin) -->
       <div
         class="city-name"
-        @touchstart="startLongPress"
-        @touchend="cancelLongPress"
+        @touchstart.stop="startLongPress"
+        @touchend.stop="cancelLongPress"
         @mousedown="startLongPress"
         @mouseup="cancelLongPress"
         @mouseleave="cancelLongPress"

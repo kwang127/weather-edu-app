@@ -51,32 +51,30 @@ const dropCount = computed(() =>
   props.type === 'heavy-rain' || props.type === 'thunderstorm' ? 60 : 30
 )
 
-function rainStyle(_i: number) {
-  const left = Math.random() * 100
-  const delay = Math.random() * 2
-  const duration = 0.6 + Math.random() * 0.4
-  const opacity = 0.3 + Math.random() * 0.4
+// Simple seeded pseudo-random based on index for stable animations
+function seeded(i: number, offset: number): number {
+  const x = Math.sin(i * 9301 + offset * 49297) * 49297
+  return x - Math.floor(x)
+}
+
+function rainStyle(i: number) {
   return {
-    left: `${left}%`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
-    opacity,
+    left: `${seeded(i, 1) * 100}%`,
+    animationDelay: `${seeded(i, 2) * 2}s`,
+    animationDuration: `${0.6 + seeded(i, 3) * 0.4}s`,
+    opacity: 0.3 + seeded(i, 4) * 0.4,
   }
 }
 
-function snowStyle(_i: number) {
-  const left = Math.random() * 100
-  const delay = Math.random() * 5
-  const duration = 3 + Math.random() * 4
-  const size = 3 + Math.random() * 5
-  const opacity = 0.4 + Math.random() * 0.5
+function snowStyle(i: number) {
+  const size = 3 + seeded(i, 5) * 5
   return {
-    left: `${left}%`,
-    animationDelay: `${delay}s`,
-    animationDuration: `${duration}s`,
+    left: `${seeded(i, 1) * 100}%`,
+    animationDelay: `${seeded(i, 2) * 5}s`,
+    animationDuration: `${3 + seeded(i, 3) * 4}s`,
     width: `${size}px`,
     height: `${size}px`,
-    opacity,
+    opacity: 0.4 + seeded(i, 4) * 0.5,
   }
 }
 </script>
