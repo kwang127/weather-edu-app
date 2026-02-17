@@ -43,7 +43,7 @@ jobs:
 
       - name: Rename APK
         run: |
-          mv android/app/build/outputs/apk/release/app-release-unsigned.apk \
+          mv android/app/build/outputs/apk/release/app-release.apk \
              android/app/build/outputs/apk/release/weather-edu-app-${{ github.ref_name }}.apk
 
       - name: Create GitHub Release
