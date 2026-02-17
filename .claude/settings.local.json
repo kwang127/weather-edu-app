@@ -11,7 +11,13 @@
       "Bash(npx vite build:*)",
       "Bash(git init:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(for f in clear-day.svg partly-cloudy-day.svg overcast.svg drizzle.svg rain.svg thunderstorms.svg snow.svg fog.svg)",
+      "Bash(do cp \"C:/Users/kwang/Downloads/weather-icons-master/weather-icons-master/production/fill/all/$f\" \"e:/0CSTX/26 春季学期/0Code/weather-edu-app/src/assets/weather-icons/$f\")",
+      "Bash(done)",
+      "Bash(wc:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }

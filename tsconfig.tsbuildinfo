@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/store/index.ts","./src/types/weather.ts","./src/utils/weather-config.ts","./src/app.vue","./src/components/admin/adminpanel.vue","./src/components/icons/weathericon.vue","./src/components/weather/weatheranimation.vue","./src/components/weather/weatherpage.vue","./env.d.ts"],"version":"5.7.3"}
