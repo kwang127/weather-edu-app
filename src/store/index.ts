@@ -21,9 +21,6 @@ function createDefaultCity(): CityWeather {
     forecast: [
       { dayLabel: '明天', weatherType: 'sunny', high: 31, low: 19 },
       { dayLabel: '后天', weatherType: 'cloudy', high: 28, low: 17 },
-      { dayLabel: '周四', weatherType: 'light-rain', high: 24, low: 16 },
-      { dayLabel: '周五', weatherType: 'sunny', high: 29, low: 18 },
-      { dayLabel: '周六', weatherType: 'cloudy', high: 27, low: 17 },
     ],
   }
 }
