@@ -31,7 +31,9 @@
       "Bash(gh run list:*)",
       "WebFetch(domain:github.com)",
       "Bash(curl:*)",
-      "Bash(npx cap:*)"
+      "Bash(npx cap:*)",
+      "Bash(git tag:*)",
+      "Bash(python3:*)"
     ]
   }
 }

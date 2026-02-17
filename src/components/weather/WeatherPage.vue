@@ -12,8 +12,10 @@
       <!-- City name (long press to enter admin) -->
       <div
         class="city-name"
-        @touchstart.stop="startLongPress"
+        @touchstart.prevent.stop="startLongPress"
         @touchend.stop="cancelLongPress"
+        @touchcancel.stop="cancelLongPress"
+        @contextmenu.prevent
         @mousedown="startLongPress"
         @mouseup="cancelLongPress"
         @mouseleave="cancelLongPress"
@@ -207,6 +209,10 @@ function speak() {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   transition: background 0.8s ease;
   overflow-x: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .weather-content {
